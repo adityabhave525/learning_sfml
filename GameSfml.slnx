@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="GameSfml/GameSfml.vcxproj" />
+  <Project Path="GameSfml/GameSfml.vcxproj" Id="855fbb63-b8d3-4de9-ba2e-e311aa4e96fc" />
 </Solution>

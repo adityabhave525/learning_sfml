@@ -3,6 +3,9 @@
 
 int main()
 {
+    // Init rand
+    std::srand(static_cast<unsigned>(time(NULL)));
+
     // Init Game Engine
     Game game;
 
