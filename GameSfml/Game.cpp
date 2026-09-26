@@ -7,9 +7,9 @@ void Game::initVariables()
 
     // Game Logic
     this->points = 0;
-    this->enemySpawnTimerMax = 1000.f;
+    this->enemySpawnTimerMax = 10.f;
     this->enemySpawnTimer = this->enemySpawnTimerMax;
-    this->maxEnemies = 5;
+    this->maxEnemies = 10;
 }
 
 void Game::initWindow()
@@ -28,8 +28,8 @@ void Game::initEnemies()
     this->enemy.setSize(sf::Vector2f(100.f, 100.f));
     this->enemy.setScale(sf::Vector2f(0.5f, 0.5f));
     this->enemy.setFillColor(sf::Color::Cyan);
-    this->enemy.setOutlineColor(sf::Color::Green);
-    this->enemy.setOutlineThickness(1.f);
+    //this->enemy.setOutlineColor(sf::Color::Green);
+    //this->enemy.setOutlineThickness(1.f);
 
 
 }
@@ -75,7 +75,6 @@ void Game::spawnEnemy()
     // Spawn the enemy
     this->enemies.push_back(this->enemy);
 
-    // Remove enemies at end of screen
 }
 
 // Functions
@@ -110,6 +109,7 @@ void Game::updateMousePositions()
     */
 
     this->mousePosWindow = sf::Mouse::getPosition(*this->window);
+    this->mousePosView = this->window->mapPixelToCoords(this->mousePosWindow);
 }
 
 void Game::updateEnemies()
@@ -138,10 +138,36 @@ void Game::updateEnemies()
         }
     }
 
-    // Move the enemies
-    for (auto &e: this->enemies)
+    // Moving and updating enemies
+    for (int i = 0; i < this->enemies.size(); i++)
     {
-        e.move(0.f, 5.f);
+        bool deleted = false;
+
+        this->enemies[i].move(0.f, 5.f);
+
+        // Check if clicked upon
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        {
+            if (this->enemies[i].getGlobalBounds().contains(this->mousePosView))
+            {
+                deleted = true;
+                
+                // Gain Points
+                this->points += 10.f;
+            }
+        }
+        
+        // If the enemy is pass the bottom of the screen then delete it
+        if (this->enemies[i].getPosition().y > this->window->getSize().y)
+        {
+            deleted = true;
+        }
+
+        // Final delete
+        if (deleted)
+        {
+            this->enemies.erase(this->enemies.begin() + i);
+        }
     }
 }
 
